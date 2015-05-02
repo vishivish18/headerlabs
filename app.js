@@ -1,11 +1,11 @@
 var express    =       require("express");
 var multer     =       require('multer');
 var app        =       express();
-var done       =       false;
+
 
 
 app.get('/',function(req,res){
-      res.sendfile("test.html");
+      res.sendfile("index.html");
 });
 
 app.listen(3000,function(){
