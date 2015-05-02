@@ -1,0 +1,2 @@
+
+Design an application without the use of any plugin (but any existing js framework can be used) which should accept a file drag-and-drop on the part of whole of page and upload it to server with ajax and show progress percentage along with size of data transferred and should have proper hooks to access handlers on events.
