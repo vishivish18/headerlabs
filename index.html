@@ -1,34 +1,34 @@
 <html>
 <head>
-    <title></title>
+    <title>Heaader Labs File Upload Task</title>
 </head>    
 <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+ <div id="drop">
+   
     
-    
-   <form id="uploadForm"
-          enctype="multipart/form-data"
-          action="/api/photo"
-          method="post">
-      <input type="file" name="userPhoto" style="font-weight: bold;text-align: center; padding: 1em 0;margin: 1em 0; color: #555; border: 2px dashed #555; border-radius: 5px; cursor: pointer;" id="drops"  />
+        <form id="uploadForm" enctype="multipart/form-data" action="/api/photo" method="post">
+      <input type="file" name="userPhoto" style="font-weight: bold;text-align: center; border: 1px dashed #555; border-radius: 5px; cursor: pointer; width:100%; height:20%;" id="drops"  />
       <input type="submit" value="Upload Image" name="submit" >
     </form>
-    
+      
+</div>       
 <div id="status"></div>
+<div id="donemsg"></div>
 
 
   </body>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  
   <script>
   $(document).ready(function() {
 
   $(window).load(function(){
     
     $('#drop').click(function(){
-        console.log('click');
-        $('#drops').trigger('click');
+        $('#drops').trigger('click')
     });
-    //Remove item
+    
     $('.fileCont span').click(function(){
         $(this).remove();
     });
@@ -39,7 +39,6 @@ if (window.FileReader) {
         var status = document.getElementById('status');
         drop = document.getElementById('drop');
         var list = document.getElementById('list');
-
         function cancel(e) {
             if (e.preventDefault) {
                 e.preventDefault();
@@ -47,15 +46,15 @@ if (window.FileReader) {
             return false;
         }
 
-        // Tells the browser that we *can* drop on this target
+        
         addEventHandler(drop, 'dragover', cancel);
         addEventHandler(drop, 'dragenter', cancel);
 
         addEventHandler(drop, 'drop', function (e) {
-            e = e || window.event; // get window.event if e argument missing (in IE)   
+            e = e || window.event; 
             if (e.preventDefault) {
-                e.preventDefault();
-            } // stops the browser from redirecting off to the image.
+                e.preventDefault(); //////accept image and not redirect to render image/file
+            } 
 
             var dt = e.dataTransfer;
             var files = dt.files;
@@ -63,8 +62,8 @@ if (window.FileReader) {
                 var file = files[i];
                 var reader = new FileReader();
 
-                //attach event handlers here...
-
+                /////Event handlers to read, render and serve file 
+                
                 reader.readAsDataURL(file);
                 addEventHandler(reader, 'loadend', function (e, file) {
                     var bin = this.result;
@@ -75,47 +74,20 @@ if (window.FileReader) {
                     var fileNumber = list.getElementsByTagName('img').length + 1;
                     status.innerHTML = fileNumber < files.length ? 'Loaded 100% of file ' + fileNumber + ' of ' + files.length + '...' : 'Done loading. processed ' + fileNumber + ' files.';
 
-                    var img = document.createElement("img");
-                    img.file = file;
-                    img.src = bin;
-                    img.className = "thumb";
-                    fileCont.appendChild(img);
-                    
-                    var newFile = document.createElement('div');
-                    newFile.innerHTML = file.name;
-                    newFile.className = "fileName";
-                    fileCont.appendChild(newFile);
+                   
                     
                     var fileSize = document.createElement('div');
                     fileSize.className = "fileSize";
                     fileSize.innerHTML = Math.round(file.size/1024) + ' KB';
                     fileCont.appendChild(fileSize);
                     
-                    var progress = document.createElement('div');
-                    progress.className = "progress";
-                    progress.innerHTML = '<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="100" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%"></div>';
-                    fileCont.appendChild(progress);
-                    
-                    var remove = document.createElement('div');
-                    remove.className = "remove";
-                    remove.innerHTML = '<span class="glyphicon glyphicon-remove"></div>';
-                    list.appendChild(remove);
-                    
+                
                     
                 }.bindToEventHandler(file));
             }
             return false;
         });
-        Function.prototype.bindToEventHandler = function bindToEventHandler() {
-            var handler = this;
-            var boundParameters = Array.prototype.slice.call(arguments);
-            //create closure
-            return function (e) {
-                e = e || window.event; // get window.event if e argument missing (in IE)   
-                boundParameters.unshift(e);
-                handler.apply(this, boundParameters);
-            }
-        };
+       
     });
 } else {
     document.getElementById('status').innerHTML = 'Your browser does not support the HTML5 FileReader.';
@@ -123,55 +95,15 @@ if (window.FileReader) {
 
 
 function addEventHandler(obj, evt, handler) {
-    if (obj.addEventListener) {
-        // W3C method
-        obj.addEventListener(evt, handler, false);
-    } else if (obj.attachEvent) {
-        // IE method.
-        obj.attachEvent('on' + evt, handler);
-    } else {
-        // Old school method.
-        obj['on' + evt] = handler;
-    }
+  //////////add this handler for varioust evt (events)
 }
 
 
-//Not plugged yet
-var bar = $('.progress-bar');
-$(function(){
-  $(bar).each(function(){
-    bar_width = $(this).attr('aria-valuenow');
-    $(this).width(bar_width + '%');
-  });
-});
 
-    
-      
-      
-      
-      
       
 ////////////////////////////////////////////
      $('#uploadForm').submit(function() {
-         
-       /*   $.ajax({
-        url: '/api/photo',
-        type: 'POST',
-        cache: false,
-        enctype : "multipart/form-data",
-        processData: false, // Don't process the files
-        contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-        success: function(response)
-        {
-         console.log(response)
-        },
-        error: function(jqXHR, textStatus, errorThrown)
-        {
-            // Handle errors here
-            console.log('ERRORS: ' + textStatus);
-            // STOP LOADING SPINNER
-        }
-    });*/
+
 
        $(this).ajaxSubmit({
 
@@ -183,7 +115,7 @@ $(function(){
 
             success: function(response) {
 		              console.log(response);
-                 $("#status").html("File uploaded <b>successfully!</b>");
+                 $("#donemsg").html("File uploaded <b>successfully!</b>");
                 
             }
 	});

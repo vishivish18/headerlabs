@@ -8,7 +8,11 @@ app.use(multer({ dest: './uploads/',
     return filename+Date.now();
   },
 onFileUploadStart: function (file) {
-  console.log(file.originalname + ' is starting ...')
+  console.log(file.originalname + ' is starting ...'+file.length)
+for (i = 0; i < file.length; i++) {
+    console.log('uploadig');
+}
+
 },
 onFileUploadComplete: function (file) {
   console.log(file.fieldname + ' uploaded to  ' + file.path)
@@ -23,13 +27,15 @@ app.get('/',function(req,res){
 });
 
 app.post('/api/photo',function(req,res){
-  if(done==true){
+
+if(done==true){
     console.log(req.files);
-    console.log('this is the size'+ req.files['userPhoto'].size);
+    console.log('this is the size'+ (req.files['userPhoto'].size/1024)+'kb');
       
       
     res.end("File uploaded.");
   }
+   
 });
 
 app.listen(3000,function(){
