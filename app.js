@@ -20,8 +20,8 @@ io.on('connection',function(socket){
         res.end("File uploaded.");
       }
     
-    var testing = "just a test";
-        socket.emit('test', {'test': req.files['userPhoto'].size});    
+    //var testing = "just a test";
+        socket.emit('uploaded', {'uploaded': req.files['userPhoto'].size});    
 });
 
         

@@ -16,15 +16,16 @@
 </div>       
 <div id="status"></div>
 <div id="donemsg"></div>
-
+<div id="filesize"></div>
 
   </body>
   <script src="/socket.io/socket.io.js"></script>
     
     <script>
        var socket= io();
-        socket.on('test', function(data){
-		  console.log(data.test);
+        socket.on('uploaded', function(data){
+		  console.log(data.uploaded);
+            $("#filesize").html("Size of file uploaded <strong>"+(data.uploaded/1024)+"</strong> kb");
       });
     </script>
   <script>
